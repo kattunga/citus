@@ -910,6 +910,10 @@ ExecuteDistributedDDLJob(DDLJob *ddlJob)
 		 */
 		if (ddlJob->startNewTransaction)
 		{
+            //
+            // See https://github.com/postgres/postgres/blob/37b2764593c073ca61c2baebd7d85666e553928b/src/backend/commands/indexcmds.c#L1563-L1579
+            //
+
             if (ActiveSnapshotSet())
             {
                 Snapshot s = GetActiveSnapshot();
