@@ -914,7 +914,7 @@ ExecuteDistributedDDLJob(DDLJob *ddlJob)
             // See https://github.com/postgres/postgres/blob/37b2764593c073ca61c2baebd7d85666e553928b/src/backend/commands/indexcmds.c#L1563-L1579
             //
 
-            if (ActiveSnapshotSet())
+            if (ActiveSnapshotSet()) // do not segfault
             {
                 Snapshot s = GetActiveSnapshot();
                 PopActiveSnapshot();
@@ -924,7 +924,7 @@ ExecuteDistributedDDLJob(DDLJob *ddlJob)
 			CommitTransactionCommand();
 			StartTransactionCommand();
 
-            // set_indexsafe_procflags();
+            // begin: copy of set_indexsafe_procflags();
             Assert(MyProc->xid == InvalidTransactionId &&
                 MyProc->xmin == InvalidTransactionId);
 
@@ -932,6 +932,7 @@ ExecuteDistributedDDLJob(DDLJob *ddlJob)
             MyProc->statusFlags |= PROC_IN_SAFE_IC;
             ProcGlobal->statusFlags[MyProc->pgxactoff] = MyProc->statusFlags;
             LWLockRelease(ProcArrayLock);
+            // end: copy of set_indexsafe_procflags();
 		}
 
 		/* save old commit protocol to restore at xact end */
