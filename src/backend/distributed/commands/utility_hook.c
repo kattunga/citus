@@ -910,27 +910,6 @@ ExecuteDistributedDDLJob(DDLJob *ddlJob)
 		 */
 		if (ddlJob->startNewTransaction)
 		{
-			/*
-			 * If cache is not populated, system catalog lookups will cause
-			 * the xmin of current backend to change. Then the last phase
-			 * of CREATE INDEX CONCURRENTLY, which is in a separate backend,
-			 * will hang waiting for our backend and result in a deadlock.
-			 *
-			 * We populate the cache before starting the next transaction to
-			 * avoid this. Most of the metadata has already been resolved in
-			 * planning phase, we only need to lookup metadata needed for
-			 * connection establishment.
-			 */
-			(void) CurrentDatabaseName();
-
-			/*
-			 * ConnParams (AuthInfo and PoolInfo) gets a snapshot, which
-			 * will blocks the remote connections to localhost. Hence we warm up
-			 * the cache here so that after we start a new transaction, the entries
-			 * will already be in the hash table, hence we won't be holding any snapshots.
-			 */
-			WarmUpConnParamsHash();
-
             if (ActiveSnapshotSet())
             {
                 Snapshot s = GetActiveSnapshot();
