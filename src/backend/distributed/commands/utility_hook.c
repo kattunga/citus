@@ -853,6 +853,7 @@ IsDropSchemaOrDB(Node *parsetree)
  * a partitioned table which has replication factor > 1.
  *
  */
+#include "utils/snapmgr.h"
 void
 ExecuteDistributedDDLJob(DDLJob *ddlJob)
 {
@@ -929,8 +930,25 @@ ExecuteDistributedDDLJob(DDLJob *ddlJob)
 			 * will already be in the hash table, hence we won't be holding any snapshots.
 			 */
 			WarmUpConnParamsHash();
+
+            if (ActiveSnapshotSet())
+            {
+                Snapshot s = GetActiveSnapshot();
+                PopActiveSnapshot();
+                UnregisterSnapshot(s);
+            }
+
 			CommitTransactionCommand();
 			StartTransactionCommand();
+
+            // set_indexsafe_procflags();
+            Assert(MyProc->xid == InvalidTransactionId &&
+                MyProc->xmin == InvalidTransactionId);
+
+            LWLockAcquire(ProcArrayLock, LW_EXCLUSIVE);
+            MyProc->statusFlags |= PROC_IN_SAFE_IC;
+            ProcGlobal->statusFlags[MyProc->pgxactoff] = MyProc->statusFlags;
+            LWLockRelease(ProcArrayLock);
 		}
 
 		/* save old commit protocol to restore at xact end */
