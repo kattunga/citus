@@ -159,6 +159,11 @@ StoreAllConnectivityChecks(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 	/* we want to check for connectivity in a deterministic order */
 	workerNodeList = SortList(workerNodeList, CompareWorkerNodes);
 
+	/*
+	 * We iterate over the workerNodeList twice, for source and target worker nodes. This
+	 * operation is safe for foreach_ptr macro, as long as we use different variables for
+	 * each iteration.
+	 */
 	WorkerNode *sourceWorkerNode = NULL;
 	foreach_ptr(sourceWorkerNode, workerNodeList)
 	{
@@ -166,9 +171,11 @@ StoreAllConnectivityChecks(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 		const int sourceNodePort = sourceWorkerNode->workerPort;
 		int32 connectionFlags = 0;
 
+		/* open a connection to the source node using the synchronous api */
 		MultiConnection *connectionToSourceNode =
 			GetNodeConnection(connectionFlags, sourceNodeName, sourceNodePort);
 
+		/* the second iteration over workerNodeList for the target worker nodes. */
 		WorkerNode *targetWorkerNode = NULL;
 		foreach_ptr(targetWorkerNode, workerNodeList)
 		{
@@ -191,7 +198,15 @@ StoreAllConnectivityChecks(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 			values[1] = Int32GetDatum(sourceNodePort);
 			values[2] = PointerGetDatum(cstring_to_text(targetNodeName));
 			values[3] = Int32GetDatum(targetNodePort);
-			values[4] = BoolGetDatum(ParseBoolField(result, 0, 0));
+
+			if (PQgetisnull(result, 0, 0))
+			{
+				isNulls[4] = true;
+			}
+			else
+			{
+				values[4] = BoolGetDatum(ParseBoolField(result, 0, 0));
+			}
 
 			tuplestore_putvalues(tupleStore, tupleDescriptor, values, isNulls);
 

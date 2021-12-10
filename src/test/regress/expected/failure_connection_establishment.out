@@ -325,11 +325,25 @@ SELECT citus.mitmproxy('conn.onQuery(query="^SELECT citus_check_connection_to_no
 SELECT * FROM citus_check_cluster_node_health();
  from_nodename | from_nodeport | to_nodename | to_nodeport | success
 ---------------------------------------------------------------------
- localhost     |          9060 | localhost   |        9060 | f
- localhost     |          9060 | localhost   |       57637 | f
+ localhost     |          9060 | localhost   |        9060 |
+ localhost     |          9060 | localhost   |       57637 |
  localhost     |         57637 | localhost   |        9060 | t
  localhost     |         57637 | localhost   |       57637 | t
 (4 rows)
+
+-- note that it is not safe to use bool_and aggregate when you have null values because bool_and(NULL, true) evaluates to true.
+SELECT bool_and(success) FROM citus_check_cluster_node_health();
+ bool_and
+---------------------------------------------------------------------
+ t
+(1 row)
+
+SELECT success, count(*) FROM citus_check_cluster_node_health() GROUP BY success ORDER BY 1;
+ success | count
+---------------------------------------------------------------------
+ t       |     2
+         |     2
+(2 rows)
 
 -- cancel all connectivity checks that originate from this node
 SELECT citus.mitmproxy('conn.onQuery(query="^SELECT citus_check_connection_to_node").cancel(' || pg_backend_pid() || ')');
@@ -351,7 +365,7 @@ SELECT * FROM citus_check_cluster_node_health();
  from_nodename | from_nodeport | to_nodename | to_nodeport | success
 ---------------------------------------------------------------------
  localhost     |          9060 | localhost   |        9060 | t
- localhost     |          9060 | localhost   |       57637 | f
+ localhost     |          9060 | localhost   |       57637 |
  localhost     |         57637 | localhost   |        9060 | t
  localhost     |         57637 | localhost   |       57637 | t
 (4 rows)
@@ -375,8 +389,8 @@ SELECT citus.mitmproxy('conn.onAuthenticationOk().kill()');
 SELECT * FROM citus_check_cluster_node_health();
  from_nodename | from_nodeport | to_nodename | to_nodeport | success
 ---------------------------------------------------------------------
- localhost     |          9060 | localhost   |        9060 | f
- localhost     |          9060 | localhost   |       57637 | f
+ localhost     |          9060 | localhost   |        9060 |
+ localhost     |          9060 | localhost   |       57637 |
  localhost     |         57637 | localhost   |        9060 | f
  localhost     |         57637 | localhost   |       57637 | t
 (4 rows)

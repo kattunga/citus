@@ -166,6 +166,10 @@ SELECT * FROM citus_check_connection_to_node('localhost', :worker_2_proxy_port);
 SELECT citus.mitmproxy('conn.onQuery(query="^SELECT citus_check_connection_to_node").kill()');
 SELECT * FROM citus_check_cluster_node_health();
 
+-- note that it is not safe to use bool_and aggregate when you have null values because bool_and(NULL, true) evaluates to true.
+SELECT bool_and(success) FROM citus_check_cluster_node_health();
+SELECT success, count(*) FROM citus_check_cluster_node_health() GROUP BY success ORDER BY 1;
+
 -- cancel all connectivity checks that originate from this node
 SELECT citus.mitmproxy('conn.onQuery(query="^SELECT citus_check_connection_to_node").cancel(' || pg_backend_pid() || ')');
 SELECT * FROM citus_check_cluster_node_health();

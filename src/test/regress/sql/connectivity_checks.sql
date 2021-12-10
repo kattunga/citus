@@ -1,1 +1,1 @@
-SELECT bool_and(success) FROM citus_check_cluster_node_health();
+SELECT count(*) FROM citus_check_cluster_node_health() WHERE success IS NOT true;
