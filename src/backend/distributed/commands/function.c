@@ -1727,6 +1727,7 @@ ObjectAddress
 AlterFunctionOwnerObjectAddress(Node *node, bool missing_ok)
 {
 	AlterOwnerStmt *stmt = castNode(AlterOwnerStmt, node);
+
 	return FunctionToObjectAddress(stmt->objectType,
 								   castNode(ObjectWithArgs, stmt->object), missing_ok);
 }
@@ -1910,6 +1911,14 @@ FunctionToObjectAddress(ObjectType objectType, ObjectWithArgs *objectWithArgs,
 						bool missing_ok)
 {
 	AssertObjectTypeIsFunctional(objectType);
+
+	MemoryContext functParamCtx = GetMemoryChunkContext(objectWithArgs);
+	if (CurrentMemoryContext != functParamCtx)
+	{
+		elog(WARNING,
+			 "AlterFunctionOwnerObjectAddress CurrentMemoryContext: %s  functParamCtxL:%s",
+			 CurrentMemoryContext->name, functParamCtx->name);
+	}
 
 	Oid funcOid = LookupFuncWithArgs(objectType, objectWithArgs, missing_ok);
 	ObjectAddress address = { 0 };
