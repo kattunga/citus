@@ -1915,7 +1915,7 @@ FunctionToObjectAddress(ObjectType objectType, ObjectWithArgs *objectWithArgs,
 	MemoryContext functParamCtx = GetMemoryChunkContext(objectWithArgs);
 	if (CurrentMemoryContext != functParamCtx)
 	{
-		elog(WARNING,
+		elog(ERROR,
 			 "AlterFunctionOwnerObjectAddress CurrentMemoryContext: %s  functParamCtxL:%s",
 			 CurrentMemoryContext->name, functParamCtx->name);
 	}
