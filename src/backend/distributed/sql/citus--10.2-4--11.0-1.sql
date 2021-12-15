@@ -29,3 +29,15 @@ BEGIN
 	END IF;
 END;
 $$;
+
+-- with Citus 11, we make sure
+-- that all the active and primary
+-- nodes becomes nodes with metadata
+SELECT
+	start_metadata_sync_to_node(nodename,nodeport)
+FROM
+	pg_dist_node
+WHERE
+	NOT metadatasynced AND
+	noderole = 'primary' AND
+	isactive;
