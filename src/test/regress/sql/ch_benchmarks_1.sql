@@ -1,6 +1,9 @@
 SET search_path to "ch benchmarks";
 SET search_path to "ch benchmarks";
 
+SELECT run_command_on_workers($$SHOW max_connections$$);
+show max_connections;
+
 -- Query 1
 SELECT
     ol_number,
