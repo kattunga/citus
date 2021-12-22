@@ -279,7 +279,6 @@ jobs:
       - codecov/upload:
           flags: 'test_<< parameters.pg_major >>,upgrade'
 
-
   test-citus-upgrade:
     description: Runs citus upgrade tests
     parameters:
@@ -548,7 +547,6 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-
       - check-merge-to-enterprise:
           filters:
             branches:
@@ -814,21 +812,21 @@ workflows:
           old_pg_major: 12
           new_pg_major: 13
           image_tag: '<< pipeline.parameters.pg12_version >>-<< pipeline.parameters.pg13_version >>-<< pipeline.parameters.pg14_version >>'
-          requires: [build-12,build-13]
+          requires: [build-12, build-13]
 
       - test-pg-upgrade:
           name: 'test-12-14_check-pg-upgrade'
           old_pg_major: 12
           new_pg_major: 14
           image_tag: '<< pipeline.parameters.pg12_version >>-<< pipeline.parameters.pg13_version >>-<< pipeline.parameters.pg14_version >>'
-          requires: [build-12,build-14]
+          requires: [build-12, build-14]
 
       - test-pg-upgrade:
           name: 'test-13-14_check-pg-upgrade'
           old_pg_major: 13
           new_pg_major: 14
           image_tag: '<< pipeline.parameters.pg12_version >>-<< pipeline.parameters.pg13_version >>-<< pipeline.parameters.pg14_version >>'
-          requires: [build-13,build-14]
+          requires: [build-13, build-14]
 
       - test-citus-upgrade:
           name: test-12_check-citus-upgrade
