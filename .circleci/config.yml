@@ -6,18 +6,17 @@ orbs:
 parameters:
   image_suffix:
     type: string
-    default: "-v2021_10_27"
+    default: '-v2021_10_27'
   pg12_version:
     type: string
-    default: "12.8"
+    default: '12.8'
   pg13_version:
     type: string
-    default: "13.4"
+    default: '13.4'
   pg14_version:
     type: string
-    default: "14.0"
+    default: '14.0'
 jobs:
-
   build:
     description: Build the citus extension
     parameters:
@@ -275,7 +274,7 @@ jobs:
           name: 'Save core dumps'
           path: /tmp/core_dumps
       - store_artifacts:
-          name: "Save logfiles"
+          name: 'Save logfiles'
           path: src/test/regress/tmp_citus_test/logfiles
       - codecov/upload:
           flags: 'test_<< parameters.pg_major >>,upgrade'
@@ -285,7 +284,7 @@ jobs:
     description: Runs citus upgrade tests
     parameters:
       pg_major:
-        description: "postgres major version"
+        description: 'postgres major version'
         type: integer
       image:
         description: 'docker image to use as for the tests'
@@ -368,7 +367,7 @@ jobs:
     description: Runs the common tests of citus
     parameters:
       pg_major:
-        description: "postgres major version"
+        description: 'postgres major version'
         type: integer
       image:
         description: 'docker image to use as for the tests'
@@ -378,7 +377,7 @@ jobs:
         description: 'docker image tag to use'
         type: string
       make:
-        description: "make target"
+        description: 'make target'
         type: string
     docker:
       - image: '<< parameters.image >>:<< parameters.image_tag >><< pipeline.parameters.image_suffix >>'
@@ -444,7 +443,7 @@ jobs:
     description: Runs tap tests for citus
     parameters:
       pg_major:
-        description: "postgres major version"
+        description: 'postgres major version'
         type: integer
       image:
         description: 'docker image to use as for the tests'
@@ -457,7 +456,7 @@ jobs:
         description: 'name of the tap test suite to run'
         type: string
       make:
-        description: "make target"
+        description: 'make target'
         type: string
         default: installcheck
     docker:
