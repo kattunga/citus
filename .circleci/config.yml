@@ -54,40 +54,22 @@ jobs:
           command: citus_indent --check
       - run:
           name: 'Fix whitespace'
-          command: ci/editorconfig.sh
-      - run:
-          name: 'Check if whitespace fixing changed anything, install editorconfig if it did'
-          command: git diff --exit-code
+          command: ci/editorconfig.sh && git diff --exit-code
       - run:
           name: 'Remove useless declarations'
-          command: ci/remove_useless_declarations.sh
-      - run:
-          name: 'Check if changed'
-          command: git diff --cached --exit-code
+          command: ci/remove_useless_declarations.sh && git diff --cached --exit-code
       - run:
           name: 'Normalize test output'
-          command: ci/normalize_expected.sh
-      - run:
-          name: 'Check if changed'
-          command: git diff --exit-code
+          command: ci/normalize_expected.sh && git diff --exit-code
       - run:
           name: 'Check for C-style comments in migration files'
-          command: ci/disallow_c_comments_in_migrations.sh
+          command: ci/disallow_c_comments_in_migrations.sh && git diff --exit-code
       - run:
-          name: 'Check if changed'
-          command: git diff --exit-code
-      - run:
-          name: 'Check for comments that start with # character in spec files'
-          command: ci/disallow_hash_comments_in_spec_files.sh
-      - run:
-          name: 'Check if changed'
-          command: git diff --exit-code
+          name: 'Check for comment--cached ns that start with # character in spec files'
+          command: ci/disallow_hash_comments_in_spec_files.sh && git diff --exit-code
       - run:
           name: 'Check for gitignore entries .for source files'
-          command: ci/fix_gitignore.sh
-      - run:
-          name: 'Check if changed'
-          command: git diff --exit-code
+          command: ci/fix_gitignore.sh && git diff --exit-code
       - run:
           name: 'Check for lengths of changelog entries'
           command: ci/disallow_long_changelog_entries.sh
