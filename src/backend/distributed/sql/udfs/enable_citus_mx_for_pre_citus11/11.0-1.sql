@@ -5,7 +5,8 @@ CREATE OR REPLACE FUNCTION pg_catalog.enable_citus_mx_for_pre_citus11()
 DECLARE
         partitioned_table_exists_pre_11 boolean:=False;
 BEGIN
-
+    -- TODO: can we return early if all the nodes have metadata synced?
+    -- We should be careful with the starter plan, we should still fix the index names.
     SELECT 
       metadata->>'partitioned_citus_table_exists_pre_11' INTO partitioned_table_exists_pre_11
     FROM pg_dist_node_metadata;

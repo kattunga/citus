@@ -3,20 +3,21 @@ CREATE OR REPLACE FUNCTION pg_catalog.enable_citus_mx_for_pre_citus11()
   LANGUAGE plpgsql
   AS $$
 DECLARE
-        partitioned_table_count_pre_11 int:=0;
+        partitioned_table_exists_pre_11 boolean:=False;
 BEGIN
-
+    -- TODO: can we return early if all the nodes have metadata synced?
+    -- We should be careful with the starter plan, we should still fix the index names.
     SELECT 
-      metadata->'partitioned_table_count_pre_11' INTO partitioned_table_count_pre_11 
+      metadata->>'partitioned_citus_table_exists_pre_11' INTO partitioned_table_exists_pre_11
     FROM pg_dist_node_metadata;
 
-    IF partitioned_table_count_pre_11 IS NOT NULL AND partitioned_table_count_pre_11 > 0 THEN
+    IF partitioned_table_exists_pre_11 IS NOT NULL AND partitioned_table_count_pre_11 THEN
 
      -- first, fix the partitions
      SELECT pg_catalog.fix_all_partition_shard_index_names();
 
      UPDATE pg_dist_node_metadata 
-     SET metadata=jsonb_set(metadata, '{partitioned_table_count_pre_11}', to_jsonb(partitioned_table_count), true);
+     SET metadata=jsonb_delete(metadata, 'partitioned_citus_table_exists_pre_11');
     END IF;
 
 
