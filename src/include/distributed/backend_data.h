@@ -30,6 +30,7 @@ typedef struct CitusInitiatedBackend
 {
 	int initiatorNodeIdentifier;
 	bool transactionOriginator;
+	uint64 globalPID;
 } CitusInitiatedBackend;
 
 
@@ -72,5 +73,8 @@ extern LocalTransactionId GetMyProcLocalTransactionId(void);
 extern int GetAllActiveClientBackendCount(void);
 extern void IncrementClientBackendCounter(void);
 extern void DecrementClientBackendCounter(void);
+
+extern uint64 GetMyBackendGlobalPID(void);
+extern void MarkCitusInitatedWorkerBackend(void);
 
 #endif /* BACKEND_DATA_H */

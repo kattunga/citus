@@ -451,6 +451,7 @@ StartupCitusBackend(void)
 	InitializeMaintenanceDaemonBackend();
 	InitializeBackendData();
 	RegisterConnectionCleanup();
+	MarkCitusInitatedWorkerBackend();
 }
 
 

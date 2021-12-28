@@ -387,12 +387,14 @@ StartNodeUserDatabaseConnection(uint32 flags, const char *hostname, int32 port,
 		IncrementSharedConnectionCounter(hostname, port);
 	}
 
+#include "distributed/backend_data.h"
 
 	/*
 	 * We've already incremented the counter above, so we should decrement
 	 * when we're done with the connection.
 	 */
 	connection->initilizationState = POOL_STATE_COUNTER_INCREMENTED;
+
 
 	StartConnectionEstablishment(connection, &key);
 

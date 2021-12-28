@@ -43,7 +43,7 @@
 
 
 #define GET_ACTIVE_TRANSACTION_QUERY "SELECT * FROM get_all_active_transactions();"
-#define ACTIVE_TRANSACTION_COLUMN_COUNT 6
+#define ACTIVE_TRANSACTION_COLUMN_COUNT 7
 
 /*
  * Each backend's data reside in the shared memory
@@ -146,9 +146,9 @@ assign_distributed_transaction_id(PG_FUNCTION_ARGS)
 	MyBackendData->transactionId.timestamp = timestamp;
 	MyBackendData->transactionId.transactionOriginator = false;
 
-	MyBackendData->citusBackend.initiatorNodeIdentifier =
-		MyBackendData->transactionId.initiatorNodeIdentifier;
-	MyBackendData->citusBackend.transactionOriginator = false;
+/*	MyBackendData->citusBackend.initiatorNodeIdentifier = */
+/*		MyBackendData->transactionId.initiatorNodeIdentifier; */
+/*	MyBackendData->citusBackend.transactionOriginator = false; */
 
 	SpinLockRelease(&MyBackendData->mutex);
 
@@ -315,6 +315,7 @@ get_global_active_transactions(PG_FUNCTION_ARGS)
 			values[3] = ParseBoolField(result, rowIndex, 3);
 			values[4] = ParseIntField(result, rowIndex, 4);
 			values[5] = ParseTimestampTzField(result, rowIndex, 5);
+			values[6] = ParseIntField(result, rowIndex, 6);
 
 			tuplestore_putvalues(tupleStore, tupleDescriptor, values, isNulls);
 		}
@@ -385,7 +386,7 @@ StoreAllActiveTransactions(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 		SpinLockAcquire(&currentBackend->mutex);
 
 		/* we're only interested in backends initiated by Citus */
-		if (currentBackend->citusBackend.initiatorNodeIdentifier < 0)
+		if (currentBackend->citusBackend.globalPID <= 0)
 		{
 			SpinLockRelease(&currentBackend->mutex);
 			continue;
@@ -400,6 +401,8 @@ StoreAllActiveTransactions(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 			SpinLockRelease(&currentBackend->mutex);
 			continue;
 		}
+		elog(INFO, "currentBackend->globalPID: %ld",
+			 currentBackend->citusBackend.globalPID);
 
 		Oid databaseId = currentBackend->databaseId;
 		int backendPid = ProcGlobal->allProcs[backendIndex].pid;
@@ -427,6 +430,7 @@ StoreAllActiveTransactions(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 		values[3] = !coordinatorOriginatedQuery;
 		values[4] = UInt64GetDatum(transactionNumber);
 		values[5] = TimestampTzGetDatum(transactionIdTimestamp);
+		values[6] = UInt64GetDatum(currentBackend->citusBackend.globalPID);
 
 		tuplestore_putvalues(tupleStore, tupleDescriptor, values, isNulls);
 
@@ -636,6 +640,8 @@ InitializeBackendData(void)
 }
 
 
+#include "unistd.h"
+
 /*
  * UnSetDistributedTransactionId simply acquires the mutex and resets the backend's
  * distributed transaction data in shared memory to the initial values.
@@ -776,7 +782,51 @@ MarkCitusInitiatedCoordinatorBackend(void)
 	MyBackendData->citusBackend.initiatorNodeIdentifier = localGroupId;
 	MyBackendData->citusBackend.transactionOriginator = true;
 
+	MyBackendData->citusBackend.globalPID = ((((uint64) localGroupId) << 32)) | getpid();
+
 	SpinLockRelease(&MyBackendData->mutex);
+}
+
+
+void
+MarkCitusInitatedWorkerBackend(void)
+{
+	if (strncmp(application_name, "citus", 5) != 0)
+	{
+		return;
+	}
+
+	StringInfo appNameStrInfo = makeStringInfo();
+
+	appendStringInfoString(appNameStrInfo, application_name);
+
+	char *applicationNameOnWorker = &appNameStrInfo->data[6];
+
+	elog(WARNING, "applicationNameOnWorker: %s", applicationNameOnWorker);
+	elog(WARNING, "applicationNameOnWorker2: %s", application_name);
+	int globalAssignedPid = strtol(applicationNameOnWorker, NULL, 10);
+
+	/*
+	 * GetLocalGroupId may throw exception which can cause leaving spin lock
+	 * unreleased. Calling GetLocalGroupId function before the lock to avoid this.
+	 */
+	int32 localGroupId = GetLocalGroupId();
+
+	SpinLockAcquire(&MyBackendData->mutex);
+
+	MyBackendData->citusBackend.initiatorNodeIdentifier = localGroupId;
+	MyBackendData->citusBackend.transactionOriginator = false;
+
+	MyBackendData->citusBackend.globalPID = globalAssignedPid;
+
+	SpinLockRelease(&MyBackendData->mutex);
+}
+
+
+uint64
+GetMyBackendGlobalPID(void)
+{
+	return MyBackendData->citusBackend.globalPID;
 }
 
 

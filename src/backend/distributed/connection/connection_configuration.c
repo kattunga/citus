@@ -253,14 +253,21 @@ GetConnParams(ConnectionHashKey *key, char ***keywords, char ***values,
 		"port",
 		"dbname",
 		"user",
-		"client_encoding"
+		"client_encoding",
+		"application_name"
 	};
+
+#include "distributed/backend_data.h"
+	StringInfo appNameStrInfo = makeStringInfo();
+	appendStringInfo(appNameStrInfo, "citus-%ld", GetMyBackendGlobalPID());
+
 	const char *runtimeValues[] = {
 		key->hostname,
 		nodePortString,
 		key->database,
 		key->user,
-		GetDatabaseEncodingName()
+		GetDatabaseEncodingName(),
+		appNameStrInfo->data
 	};
 
 	/*
