@@ -31,5 +31,5 @@ BEGIN
   RETURN;
 END;
 $$;
-COMMENT ON FUNCTION pg_catalog.enable_citus_mx()
+COMMENT ON FUNCTION pg_catalog.enable_citus_mx_for_pre_citus11()
   IS 'enables citus MX';
