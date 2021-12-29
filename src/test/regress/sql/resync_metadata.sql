@@ -33,5 +33,16 @@ INSERT into test_sequence VALUES(DEFAULT) RETURNING *;
 
 \c - - - :master_port
 SET search_path tO resync_metadata;
+
+DROP TABLE test_serial, test_sequence;
+
+\c - - - :worker_1_port
+SET search_path tO resync_metadata;
+
+-- show that we only have the sequences left after
+-- dropping the tables (e.g., bigserial is dropped)
+select count(*) from pg_sequences where schemaname ilike '%resync_metadata%';
+
+\c - - - :master_port
 SET client_min_messages TO ERROR;
 DROP SCHEMA resync_metadata CASCADE;
