@@ -45,3 +45,12 @@ DROP FUNCTION pg_catalog.citus_check_cluster_node_health ();
 
 DROP FUNCTION pg_catalog.citus_internal_add_object_metadata(text, text[], text[], integer, integer);
 DROP FUNCTION pg_catalog.citus_run_local_command(text);
+DROP FUNCTION pg_catalog.worker_drop_distributed_table(table_name text, drop_sequences bool);
+CREATE FUNCTION pg_catalog.worker_drop_distributed_table(table_name text)
+    RETURNS VOID
+    LANGUAGE C STRICT
+    AS 'MODULE_PATHNAME', $$worker_drop_distributed_table$$;
+
+COMMENT ON FUNCTION worker_drop_distributed_table(table_name text)
+    IS 'drop the distributed table and its reference from metadata tables';
+

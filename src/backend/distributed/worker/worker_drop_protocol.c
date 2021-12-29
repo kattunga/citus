@@ -17,6 +17,10 @@
 #include "access/heapam.h"
 #include "access/xact.h"
 #include "catalog/dependency.h"
+#include "catalog/pg_depend.h"
+#if PG_VERSION_NUM < PG_VERSION_13
+#include "catalog/pg_depend_d.h"
+#endif
 #include "catalog/pg_foreign_server.h"
 #include "distributed/citus_ruleutils.h"
 #include "distributed/distribution_column.h"
@@ -29,9 +33,13 @@
 #include "utils/builtins.h"
 #include "utils/fmgroids.h"
 
-
 PG_FUNCTION_INFO_V1(worker_drop_distributed_table);
 
+
+#if PG_VERSION_NUM < PG_VERSION_13
+static long deleteDependencyRecordsForSpecific(Oid classId, Oid objectId, char deptype,
+											   Oid refclassId, Oid refobjectId);
+#endif
 
 /*
  * worker_drop_distributed_table drops the distributed table with the given oid,
@@ -52,6 +60,8 @@ worker_drop_distributed_table(PG_FUNCTION_ARGS)
 	CheckCitusVersion(ERROR);
 
 	text *relationName = PG_GETARG_TEXT_P(0);
+	bool dropSequences = PG_GETARG_BOOL(1);
+
 	Oid relationId = ResolveRelationId(relationName, true);
 
 	ObjectAddress distributedTableObject = { InvalidOid, InvalidOid, 0 };
@@ -94,6 +104,15 @@ worker_drop_distributed_table(PG_FUNCTION_ARGS)
 		ObjectAddress ownedSequenceAddress = { 0 };
 		ObjectAddressSet(ownedSequenceAddress, RelationRelationId, ownedSequenceOid);
 		UnmarkObjectDistributed(&ownedSequenceAddress);
+
+		if (!dropSequences)
+		{
+			/* the caller doesn't want to drop the sequence, so break the dependency */
+			deleteDependencyRecordsForSpecific(RelationRelationId, ownedSequenceOid,
+											   DEPENDENCY_AUTO, RelationRelationId,
+											   relationId);
+			CommandCounterIncrement();
+		}
 	}
 
 	/* drop the server for the foreign relations */
@@ -153,3 +172,59 @@ worker_drop_distributed_table(PG_FUNCTION_ARGS)
 
 	PG_RETURN_VOID();
 }
+
+
+/* *INDENT-OFF* */
+#if PG_VERSION_NUM < PG_VERSION_13
+
+/*
+ * This function is already available on PG 13+.
+ * deleteDependencyRecordsForSpecific -- delete all records with given depender
+ * classId/objectId, dependee classId/objectId, of the given deptype.
+ * Returns the number of records deleted.
+ */
+static long
+deleteDependencyRecordsForSpecific(Oid classId, Oid objectId, char deptype,
+								   Oid refclassId, Oid refobjectId)
+{
+	long		count = 0;
+	Relation	depRel;
+	ScanKeyData key[2];
+	HeapTuple	tup;
+
+	depRel = table_open(DependRelationId, RowExclusiveLock);
+
+	ScanKeyInit(&key[0],
+				Anum_pg_depend_classid,
+				BTEqualStrategyNumber, F_OIDEQ,
+				ObjectIdGetDatum(classId));
+	ScanKeyInit(&key[1],
+				Anum_pg_depend_objid,
+				BTEqualStrategyNumber, F_OIDEQ,
+				ObjectIdGetDatum(objectId));
+
+	SysScanDesc scan =
+		systable_beginscan(depRel, DependDependerIndexId, true,
+						   NULL, 2, key);
+
+	while (HeapTupleIsValid(tup = systable_getnext(scan)))
+	{
+		Form_pg_depend depform = (Form_pg_depend) GETSTRUCT(tup);
+
+		if (depform->refclassid == refclassId &&
+			depform->refobjid == refobjectId &&
+			depform->deptype == deptype)
+		{
+			CatalogTupleDelete(depRel, &tup->t_self);
+			count++;
+		}
+	}
+
+	systable_endscan(scan);
+
+	table_close(depRel, RowExclusiveLock);
+
+	return count;
+}
+#endif
+/* *INDENT-ON* */
