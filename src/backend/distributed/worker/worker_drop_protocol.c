@@ -79,8 +79,6 @@ worker_drop_distributed_table(PG_FUNCTION_ARGS)
 
 	EnsureTableOwner(relationId);
 
-	List *shardList = LoadShardList(relationId);
-
 	/* first check the relation type */
 	Relation distributedRelation = relation_open(relationId, AccessShareLock);
 	relationKind = distributedRelation->rd_rel->relkind;

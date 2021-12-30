@@ -4,7 +4,6 @@ CREATE OR REPLACE FUNCTION pg_catalog.worker_drop_distributed_table_metadata(tab
     RETURNS VOID
     LANGUAGE C STRICT
     AS 'MODULE_PATHNAME', $$worker_drop_distributed_table_metadata$$;
-
 COMMENT ON FUNCTION pg_catalog.worker_drop_distributed_table_metadata(table_name text)
-    IS 'drop the distributed table's reference from metadata tables';
+    IS 'drop the distributed tables reference from metadata tables';
 
