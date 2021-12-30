@@ -899,7 +899,9 @@ MetadataDropCommands(void)
 										  detachPartitionCommandList);
 
 	dropSnapshotCommandList = lappend(dropSnapshotCommandList,
-									  REMOVE_ALL_CLUSTERED_TABLES_COMMAND);
+									  DROP_ALL_DISTRIBUTED_TABLES_COMMAND);
+	dropSnapshotCommandList = lappend(dropSnapshotCommandList,
+									  REMOVE_ALL_DISTRIBUTED_TABLE_METADATA_COMMAND);
 
 	dropSnapshotCommandList = lappend(dropSnapshotCommandList, DELETE_ALL_NODES);
 	dropSnapshotCommandList = lappend(dropSnapshotCommandList,
@@ -1221,7 +1223,8 @@ DistributionDeleteCommand(const char *schemaName, const char *tableName)
 	char *distributedRelationName = quote_qualified_identifier(schemaName, tableName);
 
 	appendStringInfo(deleteDistributionCommand,
-					 "SELECT worker_drop_distributed_table(%s)",
+					 "SELECT worker_drop_distributed_table(%s);"
+					 "SELECT worker_drop_distributed_table_metadata(%s);",
 					 quote_literal_cstr(distributedRelationName));
 
 	return deleteDistributionCommand->data;

@@ -34,6 +34,7 @@
 #include "utils/fmgroids.h"
 
 PG_FUNCTION_INFO_V1(worker_drop_distributed_table);
+PG_FUNCTION_INFO_V1(worker_drop_distributed_table_metadata);
 
 
 #if PG_VERSION_NUM < PG_VERSION_13
@@ -43,8 +44,10 @@ static long deleteDependencyRecordsForSpecific(Oid classId, Oid objectId, char d
 
 /*
  * worker_drop_distributed_table drops the distributed table with the given oid,
- * then, removes the associated rows from pg_dist_partition, pg_dist_shard and
- * pg_dist_placement. The function also drops the server for foreign tables.
+ * and does not remove the associated rows from pg_dist_partition, pg_dist_shard and
+ * pg_dist_placement.
+ *
+ * The function also drops the server for foreign tables.
  *
  * Note that drop fails if any dependent objects are present for any of the
  * distributed tables. Also, shard placements of the distributed tables are
@@ -52,7 +55,7 @@ static long deleteDependencyRecordsForSpecific(Oid classId, Oid objectId, char d
  *
  * The function errors out if the input relation Oid is not a regular or foreign table.
  * The function is meant to be called only by the coordinator, therefore requires
- * superuser privileges.
+ * table owner privileges.
  */
 Datum
 worker_drop_distributed_table(PG_FUNCTION_ARGS)
@@ -149,7 +152,37 @@ worker_drop_distributed_table(PG_FUNCTION_ARGS)
 						PERFORM_DELETION_INTERNAL);
 	}
 
+	PG_RETURN_VOID();
+}
+
+
+/*
+ * worker_drop_distributed_table_metadata removes the distributed table's
+ * associated rows from pg_dist_partition, pg_dist_shard and
+ * pg_dist_placement.
+ *
+ * The function should be called *after* the distributed table has already
+ * been dropped via worker_drop_distributed_table. The function throws an
+ * error if the input relation still exists.
+ */
+Datum
+worker_drop_distributed_table_metadata(PG_FUNCTION_ARGS)
+{
+	CheckCitusVersion(ERROR);
+
+	text *relationName = PG_GETARG_TEXT_P(0);
+
+	Oid relationId = ResolveRelationId(relationName, true);
+
+	if (OidIsValid(relationId))
+	{
+		ereport(ERROR, (errmsg("relation %s exists, first drop the table via "
+							   "worker_drop_distributed_table",
+							   text_to_cstring(relationName))));
+	}
+
 	/* iterate over shardList to delete the corresponding rows */
+	List *shardList = LoadShardList(relationId);
 	uint64 *shardIdPointer = NULL;
 	foreach_ptr(shardIdPointer, shardList)
 	{
