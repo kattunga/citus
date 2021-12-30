@@ -1225,6 +1225,7 @@ DistributionDeleteCommand(const char *schemaName, const char *tableName)
 	appendStringInfo(deleteDistributionCommand,
 					 "SELECT worker_drop_distributed_table(%s);"
 					 "SELECT worker_drop_distributed_table_metadata(%s);",
+					 quote_literal_cstr(distributedRelationName),
 					 quote_literal_cstr(distributedRelationName));
 
 	return deleteDistributionCommand->data;
