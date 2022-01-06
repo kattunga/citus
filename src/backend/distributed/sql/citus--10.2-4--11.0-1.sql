@@ -10,6 +10,10 @@
 #include "udfs/citus_run_local_command/11.0-1.sql"
 #include "udfs/worker_drop_sequence_dependency/11.0-1.sql"
 
+#include "udfs/get_all_active_transactions/11.0-1.sql"
+#include "udfs/get_global_active_transactions/11.0-1.sql"
+#include "udfs/citus_worker_stat_activity/11.0-1.sql"
+#include "udfs/citus_dist_stat_activity/11.0-1.sql"
 
 DROP FUNCTION IF EXISTS pg_catalog.master_apply_delete_command(text);
 DROP FUNCTION pg_catalog.master_get_table_metadata(text);

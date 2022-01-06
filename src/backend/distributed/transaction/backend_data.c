@@ -15,6 +15,7 @@
 #include "distributed/pg_version_constants.h"
 
 #include "miscadmin.h"
+#include "unistd.h"
 
 #include "funcapi.h"
 #include "access/htup_details.h"
@@ -43,7 +44,7 @@
 
 
 #define GET_ACTIVE_TRANSACTION_QUERY "SELECT * FROM get_all_active_transactions();"
-#define ACTIVE_TRANSACTION_COLUMN_COUNT 6
+#define ACTIVE_TRANSACTION_COLUMN_COUNT 7
 
 /*
  * Each backend's data reside in the shared memory
@@ -315,6 +316,7 @@ get_global_active_transactions(PG_FUNCTION_ARGS)
 			values[3] = ParseBoolField(result, rowIndex, 3);
 			values[4] = ParseIntField(result, rowIndex, 4);
 			values[5] = ParseTimestampTzField(result, rowIndex, 5);
+			values[6] = ParseIntField(result, rowIndex, 6);
 
 			tuplestore_putvalues(tupleStore, tupleDescriptor, values, isNulls);
 		}
@@ -427,6 +429,7 @@ StoreAllActiveTransactions(Tuplestorestate *tupleStore, TupleDesc tupleDescripto
 		values[3] = !coordinatorOriginatedQuery;
 		values[4] = UInt64GetDatum(transactionNumber);
 		values[5] = TimestampTzGetDatum(transactionIdTimestamp);
+		values[6] = UInt64GetDatum(currentBackend->globalPID);
 
 		tuplestore_putvalues(tupleStore, tupleDescriptor, values, isNulls);
 
@@ -777,6 +780,30 @@ MarkCitusInitiatedCoordinatorBackend(void)
 	MyBackendData->citusBackend.transactionOriginator = true;
 
 	SpinLockRelease(&MyBackendData->mutex);
+}
+
+void
+AssignGlobalProcessId(void)
+{
+	MyBackendData->globalPID = (((uint64) GetLocalGroupId()) * 10000000000) + getpid();
+	if (!IsCitusInitiatedRemoteBackend())
+	{
+		return;
+	}
+
+	StringInfo applicationName = makeStringInfo();
+	appendStringInfoString(applicationName, application_name);
+
+	char *globalPIDString = &applicationName->data[6];
+	uint64 globalPID = strtoul(globalPIDString, NULL, 10);
+
+	MyBackendData->globalPID = globalPID;
+}
+
+uint64
+GetGlobalPID(void)
+{
+	return MyBackendData->globalPID;
 }
 
 

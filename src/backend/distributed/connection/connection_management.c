@@ -1448,7 +1448,10 @@ ShouldShutdownConnection(MultiConnection *connection, const int cachedConnection
 bool
 IsCitusInitiatedRemoteBackend(void)
 {
-	return application_name && strcmp(application_name, CITUS_APPLICATION_NAME) == 0;
+	return application_name &&
+		   strncmp(application_name, CITUS_APPLICATION_NAME_PREFIX, strlen(CITUS_APPLICATION_NAME_PREFIX)) == 0 &&
+		   strisdigit_s(application_name + strlen(CITUS_APPLICATION_NAME_PREFIX), 20);
+		   // should I also check for 'citus' since it is the fallback app name
 }
 
 

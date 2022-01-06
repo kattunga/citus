@@ -457,6 +457,7 @@ StartupCitusBackend(void)
 	InitializeMaintenanceDaemonBackend();
 	InitializeBackendData();
 	RegisterConnectionCleanup();
+	AssignGlobalProcessId();
 }
 
 

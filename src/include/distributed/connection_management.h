@@ -30,6 +30,7 @@
 
 /* application name used for internal connections in Citus */
 #define CITUS_APPLICATION_NAME "citus"
+#define CITUS_APPLICATION_NAME_PREFIX "citus-"
 
 /* forward declare, to avoid forcing large headers on everyone */
 struct pg_conn; /* target of the PGconn typedef */
