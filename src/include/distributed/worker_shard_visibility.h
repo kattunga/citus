@@ -20,9 +20,6 @@ extern char *HideShardsFromAppNamePrefixes;
 
 extern void HideShardsFromSomeApplications(Query *query);
 extern void ResetHideShardsDecision(void);
-extern void ResetHideShardsDecisionAtXactEnd(void);
-extern void AfterSubxactResetHideShards(void);
-extern void AfterXactResetHideShards(void);
 extern void ErrorIfRelationIsAKnownShard(Oid relationId);
 extern void ErrorIfIllegallyChangingKnownShard(Oid relationId);
 extern bool RelationIsAKnownShard(Oid shardRelationId);

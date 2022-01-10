@@ -103,6 +103,9 @@ static char *CitusVersion = CITUS_VERSION;
 /* deprecated GUC value that should not be used anywhere outside this file */
 static int ReplicationModel = REPLICATION_MODEL_STREAMING;
 
+/* we override the application_name assign_hook and keep a pointer to the old one */
+static GucStringAssignHook OldApplicationNameAssignHook = NULL;
+
 
 void _PG_init(void);
 void _PG_fini(void);
@@ -116,6 +119,7 @@ static void CitusCleanupConnectionsAtExit(int code, Datum arg);
 static void DecrementClientBackendCounterAtExit(int code, Datum arg);
 static void CreateRequiredDirectories(void);
 static void RegisterCitusConfigVariables(void);
+static void OverridePostgresConfigAssignHooks(void);
 static bool ErrorIfNotASuitableDeadlockFactor(double *newval, void **extra,
 											  GucSource source);
 static bool WarnIfDeprecatedExecutorUsed(int *newval, void **extra, GucSource source);
@@ -124,6 +128,7 @@ static bool NoticeIfSubqueryPushdownEnabled(bool *newval, void **extra, GucSourc
 static bool HideShardsFromAppNamePrefixesCheckHook(char **newval, void **extra,
 												   GucSource source);
 static void HideShardsFromAppNamePrefixesAssignHook(const char *newval, void *extra);
+static void ApplicationNameAssignHook(const char *newval, void *extra);
 static bool NodeConninfoGucCheckHook(char **newval, void **extra, GucSource source);
 static void NodeConninfoGucAssignHook(const char *newval, void *extra);
 static const char * MaxSharedPoolSizeGucShowHook(void);
@@ -1803,6 +1808,33 @@ RegisterCitusConfigVariables(void)
 
 	/* warn about config items in the citus namespace that are not registered above */
 	EmitWarningsOnPlaceholders("citus");
+
+	OverridePostgresConfigAssignHooks();
+}
+
+
+/*
+ * OverridePostgresConfigAssignHooks overrides GUC assign hooks where we want
+ * custom behaviour.
+ */
+static void
+OverridePostgresConfigAssignHooks(void)
+{
+	struct config_generic **guc_vars = get_guc_variables();
+	int gucCount = GetNumConfigOptions();
+
+	for (int gucIndex = 0; gucIndex < gucCount; gucIndex++)
+	{
+		struct config_generic *var = (struct config_generic *) guc_vars[gucIndex];
+
+		if (strcmp(var->name, "application_name") == 0)
+		{
+			struct config_string *stringVar = (struct config_string *) var;
+
+			OldApplicationNameAssignHook = stringVar->assign_hook;
+			stringVar->assign_hook = ApplicationNameAssignHook;
+		}
+	}
 }
 
 
@@ -1960,6 +1992,18 @@ static void
 HideShardsFromAppNamePrefixesAssignHook(const char *newval, void *extra)
 {
 	ResetHideShardsDecision();
+}
+
+
+/*
+ * ApplicationNameAssignHook is called whenever application_name changes
+ * to allow us to reset our hide shards decision.
+ */
+static void
+ApplicationNameAssignHook(const char *newval, void *extra)
+{
+	ResetHideShardsDecision();
+	OldApplicationNameAssignHook(newval, extra);
 }
 
 

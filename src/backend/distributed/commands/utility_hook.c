@@ -424,23 +424,6 @@ ProcessUtilityInternal(PlannedStmt *pstmt,
 		{
 			PostprocessVariableSetStmt(setStmt, queryString);
 		}
-
-		if (setStmt->name != NULL &&
-			pg_strcasecmp(setStmt->name, "application_name") == 0)
-		{
-			/*
-			 * If the user changes the application_name, we may need to start
-			 * hiding/showing shards.
-			 */
-			ResetHideShardsDecision();
-
-			/*
-			 * In case of a temporary assignment (e.g. SET LOCAL), the value
-			 * may change back at the end of the transaction. Therefore we
-			 * need to always reset our cache at transaction end.
-			 */
-			ResetHideShardsDecisionAtXactEnd();
-		}
 	}
 
 	/*

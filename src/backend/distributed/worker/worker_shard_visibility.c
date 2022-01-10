@@ -42,9 +42,6 @@ bool EnableManualChangesToShards = false;
 /* hide shards when the application_name starts with one of: */
 char *HideShardsFromAppNamePrefixes = "psql,pgAdmin,pg_dump";
 
-/* if true, do not keep the hide shards decision cached at transaction end */
-static bool ResetAtXactEnd = false;
-
 /* cache of whether or not to hide shards */
 static HideShardsMode HideShards = CHECK_APPLICATION_NAME;
 
@@ -326,48 +323,6 @@ void
 ResetHideShardsDecision(void)
 {
 	HideShards = CHECK_APPLICATION_NAME;
-}
-
-
-/*
- * ResetHideShardsDecisionAtXactEnd signals that we should reset the hide shards
- * decision after the transaction.
- */
-void
-ResetHideShardsDecisionAtXactEnd(void)
-{
-	ResetAtXactEnd = true;
-}
-
-
-/*
- * AfterSubxactResetHideShards is called at the end of a subtransaction to signal
- * that we should reset the hide shards decision. The reason is that the
- * application_name might be reset.
- */
-void
-AfterSubxactResetHideShards(void)
-{
-	if (ResetAtXactEnd)
-	{
-		ResetHideShardsDecision();
-	}
-}
-
-
-/*
- * AfterXactResetHideShards is called at the end of the transaction to signal
- * that we should reset the hide shards decision. The reason is that the
- * application_name might be reset.
- */
-void
-AfterXactResetHideShards(void)
-{
-	if (ResetAtXactEnd)
-	{
-		ResetHideShardsDecision();
-		ResetAtXactEnd = false;
-	}
 }
 
 
