@@ -987,11 +987,9 @@ DROP TABLE e_transactions;
 ALTER EXTENSION citus UPDATE TO '10.2-4';
 -- Should be empty result since upgrade+downgrade should be a no-op
 SELECT * FROM multi_extension.print_extension_changes();
- previous_object |                    current_object
+ previous_object | current_object
 ---------------------------------------------------------------------
-                 | function citus_shard_indexes_on_worker() SETOF record
-                 | function citus_shards_on_worker() SETOF record
-(2 rows)
+(0 rows)
 
 -- Snapshot of state at 11.0-1
 ALTER EXTENSION citus UPDATE TO '11.0-1';
@@ -1007,8 +1005,10 @@ SELECT * FROM multi_extension.print_extension_changes();
                                                                       | function citus_disable_node(text,integer,boolean) void
                                                                       | function citus_internal_add_object_metadata(text,text[],text[],integer,integer) void
                                                                       | function citus_run_local_command(text) void
+                                                                      | function citus_shard_indexes_on_worker() SETOF record
+                                                                      | function citus_shards_on_worker() SETOF record
                                                                       | function worker_drop_sequence_dependency(text) void
-(10 rows)
+(12 rows)
 
 DROP TABLE multi_extension.prev_objects, multi_extension.extension_diff;
 -- show running version
