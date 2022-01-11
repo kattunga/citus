@@ -1,0 +1,432 @@
+CHANGELOG.md[36m:[m* Adds `alter_distributed_table` and `[1;31malter_table[m_set_access_method` UDFs
+src/backend/columnar/README.md[36m:[mSELECT [1;31malter_table[m_set_access_method('my_table', 'columnar');
+src/backend/columnar/README.md[36m:[mSELECT [1;31malter_table[m_set_access_method('my_table', 'heap');
+src/backend/distributed/commands/alter_table.c[36m:[m * [1;31malter_table[m.c
+src/backend/distributed/commands/alter_table.c[36m:[m *		[1;31malter_table[m_set_access_method:
+src/backend/distributed/commands/alter_table.c[36m:[mPG_FUNCTION_INFO_V1([1;31malter_table[m_set_access_method);
+src/backend/distributed/commands/alter_table.c[36m:[m * [1;31malter_table[m_set_access_method gets a distributed table and an access
+src/backend/distributed/commands/alter_table.c[36m:[m[1;31malter_table[m_set_access_method(PG_FUNCTION_ARGS)
+src/backend/distributed/sql/citus--9.5-1--10.0-4.sql[36m:[m#include "udfs/[1;31malter_table[m_set_access_method/10.0-1.sql"
+src/backend/distributed/sql/downgrades/citus--10.0-4--9.5-1.sql[36m:[mDROP FUNCTION pg_catalog.[1;31malter_table[m_set_access_method(regclass, text);
+src/backend/distributed/sql/udfs/alter_old_partitions_set_access_method/10.0-1.sql[36m:[m        PERFORM pg_catalog.[1;31malter_table[m_set_access_method(r.partition, new_access_method);
+src/backend/distributed/sql/udfs/alter_old_partitions_set_access_method/latest.sql[36m:[m        PERFORM pg_catalog.[1;31malter_table[m_set_access_method(r.partition, new_access_method);
+src/backend/distributed/sql/udfs/alter_table_set_access_method/10.0-1.sql[36m:[mCREATE OR REPLACE FUNCTION pg_catalog.[1;31malter_table[m_set_access_method(
+src/backend/distributed/sql/udfs/alter_table_set_access_method/10.0-1.sql[36m:[mAS 'MODULE_PATHNAME', $$[1;31malter_table[m_set_access_method$$;
+src/backend/distributed/sql/udfs/alter_table_set_access_method/10.0-1.sql[36m:[mCOMMENT ON FUNCTION pg_catalog.[1;31malter_table[m_set_access_method(
+src/backend/distributed/sql/udfs/alter_table_set_access_method/latest.sql[36m:[mCREATE OR REPLACE FUNCTION pg_catalog.[1;31malter_table[m_set_access_method(
+src/backend/distributed/sql/udfs/alter_table_set_access_method/latest.sql[36m:[mAS 'MODULE_PATHNAME', $$[1;31malter_table[m_set_access_method$$;
+src/backend/distributed/sql/udfs/alter_table_set_access_method/latest.sql[36m:[mCOMMENT ON FUNCTION pg_catalog.[1;31malter_table[m_set_access_method(
+src/backend/distributed/test/partitioning_utils.c[36m:[mPG_FUNCTION_INFO_V1(generate_[1;31malter_table[m_detach_partition_command);
+src/backend/distributed/test/partitioning_utils.c[36m:[mPG_FUNCTION_INFO_V1(generate_[1;31malter_table[m_attach_partition_command);
+src/backend/distributed/test/partitioning_utils.c[36m:[mgenerate_[1;31malter_table[m_detach_partition_command(PG_FUNCTION_ARGS)
+src/backend/distributed/test/partitioning_utils.c[36m:[mgenerate_[1;31malter_table[m_attach_partition_command(PG_FUNCTION_ARGS)
+src/include/distributed/metadata_utility.h[36m:[m * [1;31malter_table[m_set_access_method.
+src/test/regress/bin/normalize.sed[36m:[m# normalize long table shard name errors for [1;31malter_table[m_set_access_method and alter_distributed_table
+src/test/regress/expected/.gitignore[36m:[m/multi_[1;31malter_table[m_statements.out
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('alter_am_pg_version_table', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCREATE SCHEMA [1;31malter_table[m_set_access_method;
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSET search_path TO [1;31malter_table[m_set_access_method;
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('dist_table', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.dist_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.dist_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.dist_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.dist_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('partitioned_table', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('partitioned_table_1_5', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.partitioned_table_1_5
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.partitioned_table_1_5
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.partitioned_table_1_5
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.partitioned_table_1_5
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.time_partitioned_d00
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.time_partitioned_d10
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT indexname FROM pg_indexes WHERE schemaname = '[1;31malter_table[m_set_access_method' AND tablename = 'index_table';
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT a.amname FROM pg_class c, pg_am a where c.relname = 'index_table' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('index_table', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.index_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.index_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.index_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.index_table
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT indexname FROM pg_indexes WHERE schemaname = '[1;31malter_table[m_set_access_method' AND tablename = 'index_table';
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT a.amname FROM pg_class c, pg_am a where c.relname = 'index_table' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mWHERE schemaname = '[1;31malter_table[m_set_access_method' AND
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('heap_\''tbl', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  unsupported access method for index heap_\'tbl_c1_c2_excl on columnar table [1;31malter_table[m_set_access_method."heap_\'tbl", given index and the constraint depending on the index (if any) will be dropped
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  unsupported access method for index heap_tbl_gin on columnar table [1;31malter_table[m_set_access_method."heap_\'tbl", given index and the constraint depending on the index (if any) will be dropped
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  unsupported access method for index heap_tbl_\'gist on columnar table [1;31malter_table[m_set_access_method."heap_\'tbl", given index and the constraint depending on the index (if any) will be dropped
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  unsupported access method for index heap_tbl_brin on columnar table [1;31malter_table[m_set_access_method."heap_\'tbl", given index and the constraint depending on the index (if any) will be dropped
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method."heap_\'tbl"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method."heap_\'tbl"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method."heap_\'tbl"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method."heap_\'tbl"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mWHERE schemaname = '[1;31malter_table[m_set_access_method' AND
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT c.relname, a.amname FROM pg_class c, pg_am a where c.relname SIMILAR TO 'table_type\D*' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_dist', 'fake_am');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.table_type_dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "SELECT TRUE FROM [1;31malter_table[m_set_access_method.table_type_dist_1533505599 LIMIT 1"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.table_type_dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.table_type_dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.table_type_dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_ref', 'fake_am');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.table_type_ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "SELECT TRUE FROM [1;31malter_table[m_set_access_method.table_type_ref_1037855087 LIMIT 1"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.table_type_ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.table_type_ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.table_type_ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_pg_local', 'fake_am');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.table_type_pg_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.table_type_pg_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.table_type_pg_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.table_type_pg_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_citus_local', 'fake_am');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.table_type_citus_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.table_type_citus_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.table_type_citus_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.table_type_citus_local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT c.relname, a.amname FROM pg_class c, pg_am a where c.relname SIMILAR TO 'table_type\D*' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('test_fk_p1', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.test_fk_p1
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.test_fk_p1
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.test_fk_p1
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.test_fk_p1
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "ALTER TABLE [1;31malter_table[m_set_access_method.test_fk_p ATTACH PARTITION [1;31malter_table[m_set_access_method.test_fk_p1 FOR VALUES FROM (10) TO (20);"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('same_access_method', 'heap');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mERROR:  the access method of [1;31malter_table[m_set_access_method.same_access_method is already heap
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('mat_view_test','columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.mat_view_test
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.mat_view_test
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.mat_view_test
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.mat_view_test CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.mat_view_test
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('local','columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.local CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('ref','columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.ref CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('dist','columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.dist CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.dist CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('local','heap');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.local CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.local
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('ref','heap');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.ref CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.ref
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mselect [1;31malter_table[m_set_access_method('dist','heap');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.dist CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.dist
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m-- errors out since we don't support [1;31malter_table[m.* udfs with tables having any identity columns
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('identity_cols_test', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mERROR:  cannot complete command because relation [1;31malter_table[m_set_access_method.identity_cols_test has identity column
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mSELECT [1;31malter_table[m_set_access_method('abcde_0123456789012345678901234567890123456789012345678901234567890123456789', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.abcde_012345678901234567890123456789012345678901234567890123456
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "SELECT TRUE FROM [1;31malter_table[m_set_access_method.abcde_0123456789012345678901234567890123456_f7ff6612_4160710162 LIMIT 1"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.abcde_012345678901234567890123456789012345678901234567890123456
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.abcde_012345678901234567890123456789012345678901234567890123456
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "DROP TABLE [1;31malter_table[m_set_access_method.abcde_012345678901234567890123456789012345678901234567890123456 CASCADE"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.abcde_012345678901234567890123456789012345678901234567890123456
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mCONTEXT:  SQL statement "ALTER TABLE [1;31malter_table[m_set_access_method.abcde_0123456789012345678901234567890123456_f7ff6612_4160710162 RENAME TO abcde_012345678901234567890123456789012345678901234567890123456"
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m  select [1;31malter_table[m_set_access_method('events', 'columnar');
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  creating a new table for [1;31malter_table[m_set_access_method.events
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  moving the data of [1;31malter_table[m_set_access_method.events
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  dropping the old [1;31malter_table[m_set_access_method.events
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mNOTICE:  renaming the new table to [1;31malter_table[m_set_access_method.events
+src/test/regress/expected/alter_table_set_access_method.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/alter_table_set_access_method.out[36m:[mDROP SCHEMA [1;31malter_table[m_set_access_method CASCADE;
+src/test/regress/expected/columnar_alter.out[36m:[mCREATE TABLE test_[1;31malter_table[m (a int, b int, c int) USING columnar;
+src/test/regress/expected/columnar_alter.out[36m:[mINSERT INTO test_[1;31malter_table[m SELECT * FROM sample_data;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m DROP COLUMN a;
+src/test/regress/expected/columnar_alter.out[36m:[m  from columnar_test_helpers.columnar_storage_info('test_[1;31malter_table[m');
+src/test/regress/expected/columnar_alter.out[36m:[mANALYZE test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT a FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT b FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 3, 5, 8);
+src/test/regress/expected/columnar_alter.out[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 5, 8);
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN d int;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 3, 5, 8);
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[m  from columnar_test_helpers.columnar_storage_info('test_[1;31malter_table[m');
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN e int default 3;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 1, 2, 4, 8);
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[m  from columnar_test_helpers.columnar_storage_info('test_[1;31malter_table[m');
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN f text DEFAULT 'TEXT ME';
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 1, 2, 4, 8, 'ABCDEF');
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m DROP COLUMN c;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m DROP COLUMN e;
+src/test/regress/expected/columnar_alter.out[36m:[mANALYZE test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT count(*) from test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT count(t.*) from test_[1;31malter_table[m t;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN g boolean DEFAULT isfinite(current_date);
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN h DATE DEFAULT current_date;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN g DROP DEFAULT;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN h DROP DEFAULT;
+src/test/regress/expected/columnar_alter.out[36m:[mANALYZE test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN i int;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN j float;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN k text;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN i TYPE float;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN j TYPE int;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN k TYPE varchar(20);
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN k TYPE text;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m RENAME COLUMN k TO k_renamed;
+src/test/regress/expected/columnar_alter.out[36m:[mALTER TABLE test_[1;31malter_table[m RENAME TO test_[1;31malter_table[m_renamed;
+src/test/regress/expected/columnar_alter.out[36m:[mDROP TABLE test_[1;31malter_table[m_renamed;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mCREATE TABLE test_[1;31malter_table[m (a int, b int, c text) USING columnar;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mINSERT INTO test_[1;31malter_table[m SELECT * FROM sample_data;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mINSERT INTO test_[1;31malter_table[m SELECT * FROM sample_data;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN a TYPE jsonb USING row_to_json(row(a));
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mSELECT * FROM test_[1;31malter_table[m ORDER BY a;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN c TYPE int USING c::integer;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mSELECT sum(c) FROM test_[1;31malter_table[m;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN b TYPE bigint;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mSELECT * FROM test_[1;31malter_table[m ORDER BY a;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN b TYPE float USING (b::float + 0.5);
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mSELECT * FROM test_[1;31malter_table[m ORDER BY a;
+src/test/regress/expected/columnar_alter_set_type.out[36m:[mDROP TABLE test_[1;31malter_table[m;
+src/test/regress/expected/columnar_partitioning.out[36m:[mSELECT [1;31malter_table[m_set_access_method('p0','columnar');
+src/test/regress/expected/columnar_partitioning.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/columnar_partitioning.out[36m:[mSELECT [1;31malter_table[m_set_access_method('p1','columnar');
+src/test/regress/expected/columnar_partitioning.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/columnar_partitioning.out[36m:[mSELECT [1;31malter_table[m_set_access_method('p3','columnar');
+src/test/regress/expected/columnar_partitioning.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/columnar_partitioning_1.out[36m:[mSELECT [1;31malter_table[m_set_access_method('p0','columnar');
+src/test/regress/expected/columnar_partitioning_1.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/columnar_partitioning_1.out[36m:[mSELECT [1;31malter_table[m_set_access_method('p1','columnar');
+src/test/regress/expected/columnar_partitioning_1.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/columnar_partitioning_1.out[36m:[mSELECT [1;31malter_table[m_set_access_method('p3','columnar');
+src/test/regress/expected/columnar_partitioning_1.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/drop_column_partitioned_table.out[36m:[mSELECT [1;31malter_table[m_set_access_method('sensors_2004', 'columnar');
+src/test/regress/expected/drop_column_partitioned_table.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/dropped_columns_create_load.out[36m:[mSELECT [1;31malter_table[m_set_access_method('sensors_2004', 'columnar');
+src/test/regress/expected/dropped_columns_create_load.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/foreign_tables_mx.out[36m:[mselect [1;31malter_table[m_set_access_method('public.foreign_table_newname', 'columnar');
+src/test/regress/expected/multi_extension.out[36m:[m                                                                                      | function [1;31malter_table[m_set_access_method(regclass,text) void
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mCREATE FUNCTION generate_[1;31malter_table[m_detach_partition_command(regclass)
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mCREATE FUNCTION generate_[1;31malter_table[m_attach_partition_command(regclass)
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m   SELECT public.generate_[1;31malter_table[m_attach_partition_command(partition_name) INTO attach_partition_command;
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m   SELECT public.generate_[1;31malter_table[m_detach_partition_command(partition_name) INTO detach_partition_command;
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('date_partition_2006');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                              generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('date_partition_2007');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                              generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT public.generate_[1;31malter_table[m_attach_partition_command('partition_child_1_schema.child_1');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                                    generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT public.generate_[1;31malter_table[m_attach_partition_command('child_2');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                                    generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT public.generate_[1;31malter_table[m_attach_partition_command('parent_table');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('multi_column_partition_1');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                                 generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('multi_column_partition_2');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                                           generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT generate_[1;31malter_table[m_detach_partition_command('multi_column_partition_2');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                              generate_[1;31malter_table[m_detach_partition_command
+src/test/regress/expected/multi_partitioning_utils.out[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('list_partitioned_1');
+src/test/regress/expected/multi_partitioning_utils.out[36m:[m                                           generate_[1;31malter_table[m_attach_partition_command
+src/test/regress/expected/mx_regular_user.out[36m:[mSELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'columnar');
+src/test/regress/expected/mx_regular_user.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/mx_regular_user.out[36m:[mSELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'heap');
+src/test/regress/expected/mx_regular_user.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/mx_regular_user.out[36m:[m	SELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'columnar');
+src/test/regress/expected/mx_regular_user.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/mx_regular_user.out[36m:[m	SELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'heap');
+src/test/regress/expected/mx_regular_user.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/pg12.out[36m:[mSELECT [1;31malter_table[m_set_access_method('generated_stored_columnar_p0', 'columnar');
+src/test/regress/expected/pg12.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/start_stop_metadata_sync.out[36m:[mSELECT [1;31malter_table[m_set_access_method('events_2021_jan', 'columnar');
+src/test/regress/expected/start_stop_metadata_sync.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/start_stop_metadata_sync.out[36m:[mSELECT [1;31malter_table[m_set_access_method('events_replicated_2021_jan', 'columnar');
+src/test/regress/expected/start_stop_metadata_sync.out[36m:[m [1;31malter_table[m_set_access_method
+src/test/regress/expected/undistribute_table_cascade_mx.out[36m:[m-- [1;31malter_table[m_set_access_method doesn't support foreign keys
+src/test/regress/expected/undistribute_table_cascade_mx.out[36m:[m  SELECT [1;31malter_table[m_set_access_method('users', 'columnar');
+src/test/regress/expected/upgrade_list_citus_objects.out[36m:[m function [1;31malter_table[m_set_access_method(regclass,text)
+src/test/regress/multi_1_schedule[36m:[mtest: multi_[1;31malter_table[m_statements
+src/test/regress/multi_1_schedule[36m:[mtest: multi_[1;31malter_table[m_add_constraints
+src/test/regress/multi_schedule[36m:[mtest: [1;31malter_table[m_set_access_method
+src/test/regress/multi_schedule_hyperscale_superuser[36m:[mtest: multi_[1;31malter_table[m_add_constraints
+src/test/regress/sql/.gitignore[36m:[m/multi_[1;31malter_table[m_statements.sql
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('alter_am_pg_version_table', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mCREATE SCHEMA [1;31malter_table[m_set_access_method;
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSET search_path TO [1;31malter_table[m_set_access_method;
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('dist_table', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('partitioned_table', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('partitioned_table_1_5', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT indexname FROM pg_indexes WHERE schemaname = '[1;31malter_table[m_set_access_method' AND tablename = 'index_table';
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT a.amname FROM pg_class c, pg_am a where c.relname = 'index_table' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('index_table', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT indexname FROM pg_indexes WHERE schemaname = '[1;31malter_table[m_set_access_method' AND tablename = 'index_table';
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT a.amname FROM pg_class c, pg_am a where c.relname = 'index_table' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mWHERE schemaname = '[1;31malter_table[m_set_access_method' AND
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('heap_\''tbl', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mWHERE schemaname = '[1;31malter_table[m_set_access_method' AND
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT c.relname, a.amname FROM pg_class c, pg_am a where c.relname SIMILAR TO 'table_type\D*' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_dist', 'fake_am');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_ref', 'fake_am');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_pg_local', 'fake_am');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('table_type_citus_local', 'fake_am');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT c.relname, a.amname FROM pg_class c, pg_am a where c.relname SIMILAR TO 'table_type\D*' AND c.relnamespace = '[1;31malter_table[m_set_access_method'::regnamespace AND c.relam = a.oid;
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('test_fk_p1', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('same_access_method', 'heap');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('mat_view_test','columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('local','columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('ref','columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('dist','columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('local','heap');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('ref','heap');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mselect [1;31malter_table[m_set_access_method('dist','heap');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[m-- errors out since we don't support [1;31malter_table[m.* udfs with tables having any identity columns
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('identity_cols_test', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('abcde_0123456789012345678901234567890123456789012345678901234567890123456789', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[m  select [1;31malter_table[m_set_access_method('events', 'columnar');
+src/test/regress/sql/alter_table_set_access_method.sql[36m:[mDROP SCHEMA [1;31malter_table[m_set_access_method CASCADE;
+src/test/regress/sql/columnar_alter.sql[36m:[mCREATE TABLE test_[1;31malter_table[m (a int, b int, c int) USING columnar;
+src/test/regress/sql/columnar_alter.sql[36m:[mINSERT INTO test_[1;31malter_table[m SELECT * FROM sample_data;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m DROP COLUMN a;
+src/test/regress/sql/columnar_alter.sql[36m:[m  from columnar_test_helpers.columnar_storage_info('test_[1;31malter_table[m');
+src/test/regress/sql/columnar_alter.sql[36m:[mANALYZE test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT a FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT b FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 3, 5, 8);
+src/test/regress/sql/columnar_alter.sql[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 5, 8);
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN d int;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 3, 5, 8);
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[m  from columnar_test_helpers.columnar_storage_info('test_[1;31malter_table[m');
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN e int default 3;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 1, 2, 4, 8);
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[m  from columnar_test_helpers.columnar_storage_info('test_[1;31malter_table[m');
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN f text DEFAULT 'TEXT ME';
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mINSERT INTO test_[1;31malter_table[m (SELECT 1, 2, 4, 8, 'ABCDEF');
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m DROP COLUMN c;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m DROP COLUMN e;
+src/test/regress/sql/columnar_alter.sql[36m:[mANALYZE test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * from test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT count(*) from test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT count(t.*) from test_[1;31malter_table[m t;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN g boolean DEFAULT isfinite(current_date);
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN h DATE DEFAULT current_date;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN g DROP DEFAULT;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN h DROP DEFAULT;
+src/test/regress/sql/columnar_alter.sql[36m:[mANALYZE test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mSELECT * FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN i int;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN j float;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ADD COLUMN k text;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN i TYPE float;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN j TYPE int;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN k TYPE varchar(20);
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN k TYPE text;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m RENAME COLUMN k TO k_renamed;
+src/test/regress/sql/columnar_alter.sql[36m:[mALTER TABLE test_[1;31malter_table[m RENAME TO test_[1;31malter_table[m_renamed;
+src/test/regress/sql/columnar_alter.sql[36m:[mDROP TABLE test_[1;31malter_table[m_renamed;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mCREATE TABLE test_[1;31malter_table[m (a int, b int, c text) USING columnar;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mINSERT INTO test_[1;31malter_table[m SELECT * FROM sample_data;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mINSERT INTO test_[1;31malter_table[m SELECT * FROM sample_data;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN a TYPE jsonb USING row_to_json(row(a));
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mSELECT * FROM test_[1;31malter_table[m ORDER BY a;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN c TYPE int USING c::integer;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mSELECT sum(c) FROM test_[1;31malter_table[m;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN b TYPE bigint;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mSELECT * FROM test_[1;31malter_table[m ORDER BY a;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mALTER TABLE test_[1;31malter_table[m ALTER COLUMN b TYPE float USING (b::float + 0.5);
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mSELECT * FROM test_[1;31malter_table[m ORDER BY a;
+src/test/regress/sql/columnar_alter_set_type.sql[36m:[mDROP TABLE test_[1;31malter_table[m;
+src/test/regress/sql/columnar_partitioning.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('p0','columnar');
+src/test/regress/sql/columnar_partitioning.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('p1','columnar');
+src/test/regress/sql/columnar_partitioning.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('p3','columnar');
+src/test/regress/sql/drop_column_partitioned_table.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('sensors_2004', 'columnar');
+src/test/regress/sql/dropped_columns_create_load.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('sensors_2004', 'columnar');
+src/test/regress/sql/foreign_tables_mx.sql[36m:[mselect [1;31malter_table[m_set_access_method('public.foreign_table_newname', 'columnar');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mCREATE FUNCTION generate_[1;31malter_table[m_detach_partition_command(regclass)
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mCREATE FUNCTION generate_[1;31malter_table[m_attach_partition_command(regclass)
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[m   SELECT public.generate_[1;31malter_table[m_attach_partition_command(partition_name) INTO attach_partition_command;
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[m   SELECT public.generate_[1;31malter_table[m_detach_partition_command(partition_name) INTO detach_partition_command;
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('date_partition_2006');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('date_partition_2007');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT public.generate_[1;31malter_table[m_attach_partition_command('partition_child_1_schema.child_1');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT public.generate_[1;31malter_table[m_attach_partition_command('child_2');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT public.generate_[1;31malter_table[m_attach_partition_command('parent_table');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('multi_column_partition_1');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('multi_column_partition_2');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT generate_[1;31malter_table[m_detach_partition_command('multi_column_partition_2');
+src/test/regress/sql/multi_partitioning_utils.sql[36m:[mSELECT generate_[1;31malter_table[m_attach_partition_command('list_partitioned_1');
+src/test/regress/sql/mx_regular_user.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'columnar');
+src/test/regress/sql/mx_regular_user.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'heap');
+src/test/regress/sql/mx_regular_user.sql[36m:[m	SELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'columnar');
+src/test/regress/sql/mx_regular_user.sql[36m:[m	SELECT [1;31malter_table[m_set_access_method('users_table_part_0', 'heap');
+src/test/regress/sql/pg12.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('generated_stored_columnar_p0', 'columnar');
+src/test/regress/sql/start_stop_metadata_sync.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('events_2021_jan', 'columnar');
+src/test/regress/sql/start_stop_metadata_sync.sql[36m:[mSELECT [1;31malter_table[m_set_access_method('events_replicated_2021_jan', 'columnar');
+src/test/regress/sql/undistribute_table_cascade_mx.sql[36m:[m-- [1;31malter_table[m_set_access_method doesn't support foreign keys
+src/test/regress/sql/undistribute_table_cascade_mx.sql[36m:[m  SELECT [1;31malter_table[m_set_access_method('users', 'columnar');
